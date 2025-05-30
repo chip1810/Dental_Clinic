@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Model.Doctors;
 import Model.HospitalDB;
 import Model.Patients;
 import Model.User;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  *
@@ -81,13 +83,16 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
 
-            Patients patient = HospitalDB.getPatientByUserId(user.getId());
+            Patients patient = HospitalDB.getPatientByUserId(user.getUserId());
             session.setAttribute("patient", patient);
 
+            List<Doctors> doctors = HospitalDB.getAllDoctorsOnline();
+            request.setAttribute("doctors", doctors);
+            
             String role = user.getRole();  // Lấy role từ user
 
-            if ("ADMIN".equalsIgnoreCase(role)) {
-                request.getRequestDispatcher("admin_homepage.jsp").forward(request, response);
+            if ("DOCTOR".equalsIgnoreCase(role)) {
+                request.getRequestDispatcher("doctor_homepage.jsp").forward(request, response);
             } else if ("PATIENT".equalsIgnoreCase(role)) {
                 request.getRequestDispatcher("user_homepage.jsp").forward(request, response);
             } else {

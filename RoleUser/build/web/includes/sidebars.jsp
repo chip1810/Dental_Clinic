@@ -170,13 +170,13 @@
                 </div>
             </div>
            
-                <a href="user_homepage.jsp" class="menu_item">
+                <a href="UserHompageServlet" class="menu_item">
                 <i class="fa-solid fa-house "></i>
                 <span>Home</span>
                 </a>
            
           
-                <a href="user_datlich.jsp" class="menu_item">
+                <a href="BookingPageServlet" class="menu_item">
                 <i class="fa-solid fa-calendar-days"></i>
                 <span>Lịch Khám</span>
                 </a>

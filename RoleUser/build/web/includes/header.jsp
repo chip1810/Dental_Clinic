@@ -102,13 +102,14 @@
                 <div class="user-avatar" style="display: flex; align-items: center; gap: 10px;">
                     <form id="uploadForm" action="AvatarServlet" method="post" enctype="multipart/form-data" style="display: none;">
                         <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display: none;" />
-                        <input type="hidden" name="id" value="<%= user.getId()%>" />
+                        <input type="hidden" name="userId" value="<%= user.getUserId()%>" />
                     </form>
                     <%
                         Patients patient = (Patients) session.getAttribute("patient");
                         if (patient != null) {
                     %>
                     <span>Welcome, <%= patient.getFullName()%></span>
+
                     <%
                     } else {
                     %>
@@ -116,7 +117,7 @@
                     <%
                         }
                     %>
-                    <img id="avatarImg" src="<%= user.getAvatar()%>" alt="Avatar" width="35" height="35" style="border-radius: 50%; cursor: pointer;" />
+                    <img id="avatarImg" src="<%= patient.getAvatar()%>" alt="Avatar" width="35" height="35" style="border-radius: 50%; cursor: pointer;" />
 
                     <div>
                         <button onclick="location.href = 'LogoutServlet'">Đăng xuất</button>

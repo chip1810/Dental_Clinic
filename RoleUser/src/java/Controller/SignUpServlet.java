@@ -69,37 +69,36 @@ public class SignUpServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("passwordHash");
-        String confirmPassword = request.getParameter("confirmPassword");
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        System.out.println("=== LOG SIGNUP FORM ===");
-        System.out.println("Email: " + email);
-        System.out.println("Password: " + password);
+    String email = request.getParameter("email");
+    String password = request.getParameter("passwordHash");
+    String confirmPassword = request.getParameter("confirmPassword");
 
-        // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp không
-        if (!password.equals(confirmPassword)) {
-            response.sendRedirect("signup.jsp?error=nomatch");
-            return;
-        }
+    System.out.println("=== LOG SIGNUP FORM ===");
+    System.out.println("Email: " + email);
+    System.out.println("Password: " + password);
 
-        // Kiểm tra khách hàng đã tồn tại chưa
-        if (HospitalDB.isPatientExists(email)) {
-            response.sendRedirect("signup.jsp?error=exists");
-            return;
-        }
-
-        // Gọi DAO để thêm khách hàng mới (có thể mã hóa mật khẩu ở đây nếu cần)
-        int id = HospitalDB.registerPatient(email, password);
-        if (id > 0) {
-            HttpSession session = request.getSession();
-            session.setAttribute("id", id);
-            response.sendRedirect("signup.jsp?success=true");
-        } else {
-            response.sendRedirect("signup.jsp?error=db");
-        }
+    if (!password.equals(confirmPassword)) {
+        response.sendRedirect("signup.jsp?error=nomatch");
+        return;
     }
+
+    if (HospitalDB.isPatientExists(email)) {
+        response.sendRedirect("signup.jsp?error=exists");
+        return;
+    }
+
+    // Lưu tạm thông tin vào session
+    HttpSession session = request.getSession();
+    session.setAttribute("temp_email", email);
+    session.setAttribute("temp_password", password);
+
+    // Chuyển sang form nhập thông tin bệnh nhân
+    response.sendRedirect("information.jsp");
+}
+
 
     /**
      * Returns a short description of the servlet.

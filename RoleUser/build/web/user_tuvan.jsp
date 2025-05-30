@@ -9,11 +9,17 @@
         <title>Tin nhắn chờ</title>
         <style>
             body {
+
+                padding-top: 10px;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: #f8f9fb;
                 margin: 0;
-                padding: 0;
-                font-family: "Segoe UI", sans-serif;
                 width: 100%;
+
+
             }
+            
+            
 
             .header{
                 font-weight: 500;
@@ -121,6 +127,7 @@
         </style>
     </head>
     <body>
+        <div class="dashboard">
 
         <div class="message-page">
             <!-- Tiêu đề -->
@@ -155,6 +162,6 @@
 
 
         </div>
-
+        </div>
     </body>
 </html>

@@ -69,7 +69,7 @@
                     <a href="signup.jsp">Sign up</a> | <a href="#">Forget password?</a>
                 </p>
                 <p class="text-center mt-4">
-                    <a href="<%= request.getContextPath()%>/user_homepage.jsp" style="color: blue;">Trang Chủ</a>
+                    <a href="<%= request.getContextPath()%>/UserHompageServlet" style="color: blue;">Trang Chủ</a>
                 </p>
             </form>
 

@@ -5,6 +5,8 @@
 package Controller;
 
 import Model.DBConnection;
+import Model.HospitalDB;
+import Model.Patients;
 import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -82,7 +84,7 @@ public class AvatarServlet extends HttpServlet {
 protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
-    String idParam = request.getParameter("id");
+    String idParam = request.getParameter("userId");
     if (idParam == null || idParam.isEmpty()) {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing user ID");
         return;
@@ -103,7 +105,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     String base64WithHeader = "data:" + contentType + ";base64," + base64;
 
     try (Connection conn = DBConnection.getConnection()) {
-        String sql = "UPDATE users SET avatar = ? WHERE id = ?";
+        String sql = "UPDATE Patients SET avatar = ? WHERE user_id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, base64WithHeader);
         stmt.setInt(2, userId);
@@ -115,12 +117,12 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     }
 
     // ✅ Cập nhật avatar mới vào session
-    HttpSession session = request.getSession(false);
+     HttpSession session = request.getSession(false);
     if (session != null) {
-        User user = (User) session.getAttribute("user");
-        if (user != null && user.getId() == userId) {
-            user.setAvatar(base64WithHeader);
-            session.setAttribute("user", user);
+        // Load lại Patients từ DB
+        Patients updatedPatient = HospitalDB.getPatientByUserId(userId);
+        if (updatedPatient != null) {
+            session.setAttribute("patient", updatedPatient);
         }
     }
 

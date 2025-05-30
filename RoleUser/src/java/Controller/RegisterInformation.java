@@ -71,29 +71,54 @@ public class RegisterInformation extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-// Lấy userId từ session
-        HttpSession session = request.getSession(false);
-        Integer id = (session != null) ? (Integer) session.getAttribute("id") : null;
 
-        if (id == null) {
-            response.sendRedirect("login.jsp");
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.sendRedirect("signup.jsp?error=session_expired");
             return;
         }
 
-        // Lấy dữ liệu từ form
+        // Lấy lại thông tin đã lưu ở bước 1
+        String email = (String) session.getAttribute("temp_email");
+        String password = (String) session.getAttribute("temp_password");
+
+        if (email == null || password == null) {
+            response.sendRedirect("signup.jsp?error=session_expired");
+            return;
+        }
+
+        // Lấy thông tin từ form
         String fullName = request.getParameter("full_name");
         String phone = request.getParameter("phone");
         String dateOfBirth = request.getParameter("date_of_birth");
         String gender = request.getParameter("gender");
 
-        // Gọi DAO để lưu thông tin bệnh nhân
-        boolean success = HospitalDB.savePatientInfo(id, fullName, phone, dateOfBirth, gender);
+        // Tạo tài khoản trước
+        int userId = HospitalDB.registerPatient(email, password);
 
-        if (success) {
-            response.sendRedirect("login.jsp");
+        if (userId > 0) {
+            // Lưu thông tin cá nhân
+            boolean success = HospitalDB.savePatientInfo(userId, fullName, phone, dateOfBirth, gender);
+
+            if (success) {
+                // Xóa session tạm
+                session.removeAttribute("temp_email");
+                session.removeAttribute("temp_password");
+
+                // Đăng nhập luôn nếu muốn
+                session.setAttribute("id", userId);
+
+                // Chuyển sang trang login hoặc homepage
+                response.sendRedirect("login.jsp");
+            } else {
+                // (Tùy chọn) Xóa user nếu lưu info thất bại
+                // HospitalDB.deleteUser(userId);
+
+                response.sendRedirect("information.jsp?error=save_failed");
+            }
         } else {
-            response.sendRedirect("information.jsp?error=true");
-        }    
+            response.sendRedirect("signup.jsp?error=register_failed");
+        }
     }
 
     /**

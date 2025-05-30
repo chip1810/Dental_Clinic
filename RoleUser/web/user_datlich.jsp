@@ -1,18 +1,15 @@
+<%@page import="Model.TimeSlot"%>
+<%@page import="Model.DoctorSchedule"%>
+<%@page import="java.util.List"%>
+<%@page import="Model.Doctors"%>
 <%@page contentType="text/html" pageEncoding="utf-8" %>
 <%@ include file="/includes/header.jsp" %>
-
 <%@ include file="/includes/sidebars.jsp" %>
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="vi">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="UTF-8" />
         <title>Đặt lịch khám</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
         <style>
@@ -30,13 +27,8 @@
                 box-sizing: border-box;
                 padding: 40px;
                 background-color: #f8f9fb;
-                border-radius: 0; /* bỏ bo góc nếu muốn full */
-                box-shadow: none;
                 padding-left: 300px;
             }
-
-
-   
 
             .scheduler h2 {
                 text-align: center;
@@ -105,7 +97,7 @@
                 color: white;
             }
 
-            button {
+            .apointment {
                 width: 100%;
                 padding: 14px;
                 background-color: #00796b;
@@ -120,94 +112,172 @@
                 transition: background-color 0.3s ease;
             }
 
-            button:hover {
+            .apointment:hover {
                 background-color: #00695c;
             }
-            .time{
-                display:none;
 
+            .time {
+                display: none;
             }
 
+            /* Ẩn hiện slot */
+            .hidden {
+                display: none !important;
+            }
+
+            /* Thông báo không có lịch */
+            .no-schedule {
+                text-align: center;
+                color: #b71c1c;
+                font-weight: 600;
+                margin-top: 30px;
+            }
         </style>
     </head>
     <body>
 
         <div class="scheduler">
-            <h2><i class="fa-solid fa-calendar-plus"></i> Đặt lịch khám</h2>
+            <h2><i class="fa-solid fa-calendar-plus"></i> Đặt lịch khám với bác sĩ 
+                <%            Doctors doctor = (Doctors) request.getAttribute("doctor");
+                    if (doctor != null) {
+                        out.print(doctor.getFullName());
+                    }
+                %>
+            </h2>
 
-            <!-- Chọn ngày -->
+            <!-- Chọn ngày (hiển thị 30 ngày tới) -->
             <div class="calendar" id="calendar"></div>
 
-            <!-- Chọn giờ -->
+            <!-- Tiêu đề chọn giờ -->
             <div class="centered">
-                <h2 class="time" id="time-available">Đặt giờ khám</h2>
-            </div>
-            <div class="time-picker" id="timePicker">
-                <div class="time-slot">08:00</div>
-                <div class="time-slot">09:00</div>
-                <div class="time-slot">10:00</div>
-                <div class="time-slot">11:00</div>
-                <div class="time-slot">14:00</div>
-                <div class="time-slot">15:00</div>
-                <div class="time-slot">16:00</div>
+                <h2 class="time" id="time-available">Chọn giờ khám</h2>
             </div>
 
-            <button id="confirmBtn">Xác nhận đặt lịch</button>
+            <!-- Chọn giờ làm việc (dữ liệu từ server, ẩn ban đầu) -->
+            <div class="time-picker" id="timePicker">
+                <%
+                    List<DoctorSchedule> schedules = (List<DoctorSchedule>) request.getAttribute("availableSchedules");
+                    if (schedules != null && !schedules.isEmpty()) {
+                        for (DoctorSchedule ds : schedules) {
+                            TimeSlot ts = ds.getTimeSlot();
+                            String start = ts.getStartTime().toString();
+                            String workDate = ds.getWorkDate().toString();
+                %>
+                <div class="time-slot" 
+                     data-schedule-id="<%= ds.getScheduleId()%>" 
+                     data-work-date="<%= workDate%>" 
+                     data-start-time="<%= start%>">
+                    <%= start%>
+                </div>
+                <%  }
+        } else { %>
+                <p class="no-schedule">Hiện không có lịch khám trống.</p>
+                <% }%>
+            </div>
+
+            <button class="apointment" id="confirmBtn">Xác nhận đặt lịch</button>
         </div>
 
-        <script>
-            // Render lịch 30 ngày tới
-            const calendar = document.getElementById("calendar");
-            const today = new Date();
-            for (let i = 0; i < 30; i++) {
-                const date = new Date(today);
-                date.setDate(today.getDate() + i);
-                const day = document.createElement("div");
-                day.className = "day";
-                day.textContent = date.getDate() + '/' + (date.getMonth() + 1);
-                day.dataset.date = date.toISOString().split('T')[0]; // format YYYY-MM-DD
-                calendar.appendChild(day);
-            }
+        <!-- Form ẩn gửi dữ liệu đặt lịch -->
+        <form id="appointmentForm" action="ConfirmServlet" method="post" style="display:none;">
+            <input type="hidden" name="doctor_id" id="doctor_id" value="<%= doctor != null ? doctor.getDoctorId() : ""%>" />
 
-            let selectedDay = null;
-            let selectedTime = null;
+            <input type="hidden" name="schedule_id" id="schedule_id" />
+            <input type="hidden" name="work_date" id="work_date" />
+            <input type="hidden" name="start_time" id="start_time" />
+        </form>
 
+       <script>
+    // Các biến DOM
+    const calendar = document.getElementById("calendar");
+    const timeAvailable = document.getElementById("time-available");
+    const timePicker = document.getElementById("timePicker");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const appointmentForm = document.getElementById("appointmentForm");
 
-            const timeAvailable = document.getElementById("time-available");
-            const timePicker = document.getElementById("timePicker");
-            const timeSlots = timePicker.querySelectorAll(".time-slot");
-            const confirmBtn = document.getElementById("confirmBtn");
+    let selectedDay = null;
+    let selectedTime = null;
 
-            calendar.addEventListener("click", function (e) {
-                if (e.target.classList.contains("day")) {
-                    calendar.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
-                    e.target.classList.add("selected");
-                    selectedDay = e.target.dataset.date;
-                    timePicker.style.display = "flex";
-                    timeAvailable.style.display = "flex";
-                    timeAvailable.style.justifyContent = "center";  // căn giữa ngang
-                    confirmBtn.style.display = "none";
-                    selectedTime = null;
-                    timeSlots.forEach(slot => slot.classList.remove("selected"));
+    // Tạo lịch 30 ngày tới
+    const today = new Date();
+    for (let i = 0; i < 30; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        const day = document.createElement("div");
+        day.className = "day";
+        day.textContent = date.getDate() + '/' + (date.getMonth() + 1);
+        day.dataset.date = date.toISOString().split('T')[0]; // YYYY-MM-DD
+        calendar.appendChild(day);
+    }
+
+    // Xử lý chọn ngày
+    calendar.addEventListener("click", function (e) {
+        if (e.target.classList.contains("day")) {
+            // Bỏ chọn tất cả ngày
+            calendar.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
+            e.target.classList.add("selected");
+
+            selectedDay = e.target.dataset.date;
+            selectedTime = null;
+
+            // Hiển thị time picker và tiêu đề
+            timePicker.style.display = "flex";
+            timeAvailable.style.display = "flex";
+            confirmBtn.style.display = "none";
+
+            // Ẩn tất cả khung giờ
+            timePicker.querySelectorAll(".time-slot").forEach(slot => {
+                slot.style.display = "none";
+                slot.classList.remove("selected");
+            });
+
+            // Hiển thị những khung giờ phù hợp với ngày được chọn
+            timePicker.querySelectorAll(".time-slot").forEach(slot => {
+                if (slot.getAttribute("data-work-date") === selectedDay) {
+                    slot.style.display = "inline-block";
                 }
             });
+        }
+    });
 
-            timeSlots.forEach(slot => {
-                slot.addEventListener("click", () => {
-                    timeSlots.forEach(s => s.classList.remove("selected"));
-                    slot.classList.add("selected");
-                    selectedTime = slot.textContent;
-                    confirmBtn.style.display = "block";
-                });
-            });
+    // Xử lý chọn giờ
+    timePicker.querySelectorAll(".time-slot").forEach(slot => {
+        slot.addEventListener("click", () => {
+            timePicker.querySelectorAll(".time-slot").forEach(s => s.classList.remove("selected"));
+            slot.classList.add("selected");
+            selectedTime = slot.textContent;
+            confirmBtn.style.display = "block";
+        });
+    });
 
-            confirmBtn.addEventListener("click", () => {
-                if (selectedDay && selectedTime) {
-                    alert(`Đã đặt lịch vào ngày ${selectedDay} lúc ${selectedTime}`);
-                    // TODO: Gửi dữ liệu đến Servlet/Controller xử lý lưu lịch hẹn
-                }
-            });
-        </script>
+    // Xử lý submit form khi bấm nút xác nhận
+    confirmBtn.addEventListener("click", () => {
+        if (!selectedDay) {
+            alert("Vui lòng chọn ngày!");
+            return;
+        }
+        if (!selectedTime) {
+            alert("Vui lòng chọn giờ!");
+            return;
+        }
+
+        // Lấy time slot được chọn
+        const selectedSlot = document.querySelector(".time-slot.selected");
+        if (!selectedSlot) {
+            alert("Vui lòng chọn khung giờ!");
+            return;
+        }
+
+        // Đổ dữ liệu vào form ẩn
+        document.getElementById("schedule_id").value = selectedSlot.getAttribute("data-schedule-id");
+        document.getElementById("work_date").value = selectedSlot.getAttribute("data-work-date");
+        document.getElementById("start_time").value = selectedSlot.getAttribute("data-start-time");
+
+        // Gửi form
+        appointmentForm.submit();
+    });
+</script>
+
 
     </body>
 </html>
