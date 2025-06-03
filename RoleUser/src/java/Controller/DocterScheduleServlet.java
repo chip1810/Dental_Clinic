@@ -15,8 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -75,7 +74,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         request.setAttribute("doctor", doctor);
 
         // Forward sang trang JSP hiển thị lịch
-        request.getRequestDispatcher("user_datlich.jsp").forward(request, response);
+        request.getRequestDispatcher("patient/user_datlich.jsp").forward(request, response);
         
     } catch (SQLException e) {
         // Bọc SQLException trong ServletException

@@ -81,12 +81,12 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     System.out.println("Password: " + password);
 
     if (!password.equals(confirmPassword)) {
-        response.sendRedirect("signup.jsp?error=nomatch");
+        response.sendRedirect("patient/signup.jsp?error=nomatch");
         return;
     }
 
     if (HospitalDB.isPatientExists(email)) {
-        response.sendRedirect("signup.jsp?error=exists");
+        response.sendRedirect("patient/signup.jsp?error=exists");
         return;
     }
 
@@ -96,7 +96,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     session.setAttribute("temp_password", password);
 
     // Chuyển sang form nhập thông tin bệnh nhân
-    response.sendRedirect("information.jsp");
+    response.sendRedirect("patient/information.jsp");
 }
 
 

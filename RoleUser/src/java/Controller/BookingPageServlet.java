@@ -93,7 +93,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     List<String> specialties = HospitalDB.getAllSpecialties();
     request.setAttribute("specialties", specialties);
 
-    request.getRequestDispatcher("user_datlich_bacsi.jsp").forward(request, response);
+    request.getRequestDispatcher("patient/user_datlich_bacsi.jsp").forward(request, response);
 }
 
 

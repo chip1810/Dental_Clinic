@@ -72,7 +72,7 @@ public class PatientInfo extends HttpServlet {
         request.setAttribute("patient", patient);
 
         // Chuyển đến trang JSP
-        request.getRequestDispatcher("user_taikhoan.jsp").forward(request, response);
+        request.getRequestDispatcher("patient/user_taikhoan.jsp").forward(request, response);
     }
 
     /**

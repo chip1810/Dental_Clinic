@@ -4,14 +4,17 @@
  */
 package Controller;
 
+import Model.Appointment;
 import Model.Doctors;
 import Model.HospitalDB;
+import Model.Patients;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -57,12 +60,24 @@ public class UserHompageServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("patient") == null) {
+            response.sendRedirect("patient/login.jsp");
+            return;
+        }
+
+        Patients patient = (Patients) session.getAttribute("patient");
+        List<Appointment> upcomingAppointments = HospitalDB.getUpcomingAppointmentsByPatientId(patient.getPatientId());
+        request.setAttribute("upcomingAppointments", upcomingAppointments);
 
         List<Doctors> doctors = HospitalDB.getAllDoctorsOnline();
-            request.setAttribute("doctors", doctors);
+        request.setAttribute("doctors", doctors);
+        int totalVisits = HospitalDB.getTotalVisitsByPatientId(patient.getPatientId());
+        request.setAttribute("totalVisits", totalVisits);
 
-        request.getRequestDispatcher("user_homepage.jsp").forward(request, response);
+        request.getRequestDispatcher("patient/user_homepage.jsp").forward(request, response);
     }
 
     /**

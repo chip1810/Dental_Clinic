@@ -3,23 +3,48 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/information.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/information.jsp</file>
             <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/login.jsp</file>
-            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/user_datlich_bacsi.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/user_datlich_bacsi.jsp</file>
             <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/BookingPageServlet.java</file>
             <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/ConfirmServlet.java</file>
             <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/HospitalDB.java</file>
             <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/LoginServlet.java</file>
             <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/Appointment.java</file>
-            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/doctor_homepage.jsp</file>
-            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/user_homepage.jsp</file>
-            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/demo2.jsp</file>
-            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/includes/header.jsp</file>
-            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/includes/sidebars.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/doctor/doctor_homepage.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/user_homepage.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/demo2.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/header.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/sidebars.jsp</file>
             <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/DocterScheduleServlet.java</file>
-            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/user_datlich.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/user_datlich.jsp</file>
             <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/TimeSlot.java</file>
             <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/Doctors.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/AvatarServlet.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/MedicalReport.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/Medicine.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/Prescription.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/PatientInfo.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/Patients.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/UserHompageServlet.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/user_lichkham.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/demo.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/DoctorDAO.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/InputMedicalReportServlet.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/SubmitMedicalReportServlet.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/MedicineDAO.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/user_taikhoan.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/user_tuvan.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/signup.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/index.html</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/footer.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/patient/datlich-thanhcong.jsp</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/LogoutServlet.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/RegisterInformation.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/SignUpServlet.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Model/DatabaseInfo.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/src/java/Controller/DoctorAppointmentsServlet.java</file>
+            <file>file:/D:/PROJECT/PM/Dental_Clinic/RoleUser/web/doctor/doctor_schedule.jsp</file>
         </group>
     </open-files>
 </project-private>

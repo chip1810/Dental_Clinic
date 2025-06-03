@@ -74,7 +74,7 @@ public class RegisterInformation extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         if (session == null) {
-            response.sendRedirect("signup.jsp?error=session_expired");
+            response.sendRedirect("patient/signup.jsp?error=session_expired");
             return;
         }
 
@@ -83,7 +83,7 @@ public class RegisterInformation extends HttpServlet {
         String password = (String) session.getAttribute("temp_password");
 
         if (email == null || password == null) {
-            response.sendRedirect("signup.jsp?error=session_expired");
+            response.sendRedirect("patient/signup.jsp?error=session_expired");
             return;
         }
 
@@ -109,15 +109,15 @@ public class RegisterInformation extends HttpServlet {
                 session.setAttribute("id", userId);
 
                 // Chuyển sang trang login hoặc homepage
-                response.sendRedirect("login.jsp");
+                response.sendRedirect("patient/login.jsp");
             } else {
                 // (Tùy chọn) Xóa user nếu lưu info thất bại
                 // HospitalDB.deleteUser(userId);
 
-                response.sendRedirect("information.jsp?error=save_failed");
+                response.sendRedirect("patient/information.jsp?error=save_failed");
             }
         } else {
-            response.sendRedirect("signup.jsp?error=register_failed");
+            response.sendRedirect("patient/signup.jsp?error=register_failed");
         }
     }
 

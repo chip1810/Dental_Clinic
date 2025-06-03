@@ -380,4 +380,51 @@ public class HospitalDB implements DatabaseInfo {
         return list;
     }
 
+    public static List<Appointment> getUpcomingAppointmentsByPatientId(int patientId) {
+        List<Appointment> list = new ArrayList<>();
+        String sql = "SELECT a.appointment_id, a.work_date, a.slot_id, a.status, a.reason, "
+                + "d.full_name AS doctor_name, s.start_time, s.end_time "
+                + "FROM Appointment a "
+                + "JOIN Doctors d ON a.doctor_id = d.doctor_id "
+                + "JOIN TimeSlot s ON a.slot_id = s.slot_id "
+                + "WHERE a.patient_id = ? AND a.work_date >= GETDATE() "
+                + "ORDER BY a.work_date ASC";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, patientId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Appointment ap = new Appointment();
+                ap.setAppointmentId(rs.getInt("appointment_id"));
+                ap.setWorkDate(rs.getDate("work_date").toLocalDate());
+                ap.setSlotId(rs.getInt("slot_id"));
+                ap.setDoctorName(rs.getString("doctor_name"));
+                ap.setStatus(rs.getString("status"));
+                ap.setStartTime(rs.getTime("start_time").toLocalTime());
+                ap.setEndTime(rs.getTime("end_time").toLocalTime());
+                list.add(ap);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    
+    public static int getTotalVisitsByPatientId(int patientId) {
+    String sql = "SELECT COUNT(*) FROM Appointment WHERE patient_id = ? AND status = N'Đã khám'";
+    try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, patientId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
+    
 }

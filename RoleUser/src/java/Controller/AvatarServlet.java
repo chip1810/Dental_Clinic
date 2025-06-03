@@ -7,7 +7,6 @@ package Controller;
 import Model.DBConnection;
 import Model.HospitalDB;
 import Model.Patients;
-import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -127,7 +126,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     }
 
     // Quay về trang chủ
-    response.sendRedirect("user_homepage.jsp");
+    response.sendRedirect("patient/user_homepage.jsp");
 }
 
 

@@ -83,7 +83,7 @@
 
             <p class=" text-center mt-3">Đã có tài khoản? <a href="login.jsp">Đăng nhập</a></p>
             <p class="text-center mt-4">
-                <a href="<%= request.getContextPath()%>/user_homepage.jsp" style="color: blue;">Trang Chủ</a>
+                <a href="<%= request.getContextPath()%>patient/user_homepage.jsp" style="color: blue;">Trang Chủ</a>
             </p>
         </div>
 

@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Model.Appointment;
 import Model.Doctors;
 import Model.HospitalDB;
 import Model.Patients;
@@ -77,26 +78,34 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String passwordHash = request.getParameter("password_hash");
+
         User user = HospitalDB.getUserByEmailAndPassword(email, passwordHash);
 
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
 
-            Patients patient = HospitalDB.getPatientByUserId(user.getUserId());
-            session.setAttribute("patient", patient);
-
-            List<Doctors> doctors = HospitalDB.getAllDoctorsOnline();
-            request.setAttribute("doctors", doctors);
-            
             String role = user.getRole();  // Lấy role từ user
 
             if ("DOCTOR".equalsIgnoreCase(role)) {
-                request.getRequestDispatcher("doctor_homepage.jsp").forward(request, response);
+                response.sendRedirect("DoctorAppointmentsServlet");
             } else if ("PATIENT".equalsIgnoreCase(role)) {
-                request.getRequestDispatcher("user_homepage.jsp").forward(request, response);
+                // Nếu là bệnh nhân, lấy thông tin liên quan
+                Patients patient = HospitalDB.getPatientByUserId(user.getUserId());
+                session.setAttribute("patient", patient);
+
+                List<Doctors> doctors = HospitalDB.getAllDoctorsOnline();
+                request.setAttribute("doctors", doctors);
+
+                List<Appointment> upcomingAppointments = HospitalDB.getUpcomingAppointmentsByPatientId(patient.getPatientId());
+                request.setAttribute("upcomingAppointments", upcomingAppointments);
+
+                int totalVisits = HospitalDB.getTotalVisitsByPatientId(patient.getPatientId());
+                request.setAttribute("totalVisits", totalVisits);
+
+                response.sendRedirect("UserHompageServlet");
             } else {
-                // Role không xác định, chuyển hướng về trang lỗi hoặc đăng nhập
+                // Role không xác định
                 response.sendRedirect("login.jsp?error=invalid_role");
             }
         } else {
